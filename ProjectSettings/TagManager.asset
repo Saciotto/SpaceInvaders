@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Selection Pointer
+  - PlayerLimits
+  - InvaderLimits
   layers:
   - Default
   - TransparentFX
