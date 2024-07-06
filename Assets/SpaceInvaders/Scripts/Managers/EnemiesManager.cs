@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class EnemiesManager : MonoBehaviour
 {
+    public static EnemiesManager Instance { get; private set; }
+
     [SerializeField] private GameObject _squidPrefab;
     [SerializeField] private GameObject _crabPrefab;
     [SerializeField] private GameObject _octopusPrefab;
@@ -32,6 +34,7 @@ public class EnemiesManager : MonoBehaviour
     private int _spawnedEnemies = 0;
     private int _spawnRows = 0;
     private int _movimentDirection = 1;
+    private GameObject _deadEnemy = null;
 
     private class EnemyData
     {
@@ -41,6 +44,7 @@ public class EnemiesManager : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         GameManager.Instance.OnGameStateChanged += this.OnGameStateChanged;
     }
 
@@ -161,25 +165,42 @@ public class EnemiesManager : MonoBehaviour
         }
         _movimentTimer -= _movimentInterval;
 
+        if (_deadEnemy != null) {
+            _enemies.Remove(_deadEnemy);
+            Destroy(_deadEnemy);
+            _deadEnemy = null;
+        }
+
         if (ShouldAdvanceLine()) {
             _movimentDirection *= -1;
             float movimentY = _octopusPrefab.GetComponent<SpriteRenderer>().bounds.size.y;
             foreach (GameObject enemy in _enemies) {
-                enemy.transform.position += new Vector3(0, -movimentY, 0);
+                enemy.GetComponent<Rigidbody2D>().MovePosition(enemy.transform.position + new Vector3(0, -movimentY, 0));
             }
         } else {
             foreach (GameObject enemy in _enemies) {
-                enemy.transform.position += new Vector3(_movimentDistance * _movimentDirection, 0, 0);
+                enemy.GetComponent<Rigidbody2D>().MovePosition(enemy.transform.position + new Vector3(_movimentDistance * _movimentDirection, 0, 0));
             }
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (GameManager.Instance.CurrentGameState == GameState.SpawningEnimies) {
             SpawningEnemies();
         } else if (GameManager.Instance.CurrentGameState == GameState.Playing) {
             MoveEnemies();
         }
+    }
+
+    public void Kill(GameObject enemy)
+    {
+        if (_deadEnemy != null) {
+            _enemies.Remove(_deadEnemy);
+            Destroy(_deadEnemy);
+        }
+        _deadEnemy = enemy;
+        enemy.GetComponent<Animator>().SetBool("Dead", true);
+        _movimentTimer = _movimentInterval * 0.5f;
     }
 }

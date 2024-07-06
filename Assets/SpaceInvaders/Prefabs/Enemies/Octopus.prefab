@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 4685849867231752608}
   - component: {fileID: 8716153512711132429}
   - component: {fileID: 8523947724151615443}
+  - component: {fileID: 1081778429508773267}
   m_Layer: 0
   m_Name: Octopus
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,3 +153,30 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.75, y: 0.5}
   m_EdgeRadius: 0
+--- !u!50 &1081778429508773267
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861252293346857835}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
