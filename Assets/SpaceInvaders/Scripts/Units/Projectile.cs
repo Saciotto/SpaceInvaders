@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour
     private bool _destroy = false;
     private float _destroyTimer = 0.0f;
     private Transform _topLimit;
+    private Transform _bottomLimit;
     private float _speed;
 
     public int Direction;
@@ -17,6 +18,7 @@ public class Projectile : MonoBehaviour
     {
         _speed = Speed;
         _topLimit = GameManager.Instance.TopLimit;
+        _bottomLimit = GameManager.Instance.BottomLimit;
     }
 
     private void FixedUpdate()
@@ -30,6 +32,10 @@ public class Projectile : MonoBehaviour
             GetComponent<Animator>().SetBool("Destroy", true);
         }
 
+        if (transform.position.y < _bottomLimit.position.y) {
+            Destroy(gameObject);
+        }
+
         if (_destroy) {
             _destroyTimer += Time.fixedDeltaTime;
             if (_destroyTimer > 0.5f) {
@@ -38,19 +44,16 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy")) {
-            EnemiesManager.Instance.Kill(collision.gameObject);
-            Destroy(gameObject);
-        }
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy")) {
             EnemiesManager.Instance.Kill(collision.gameObject);
+            collision.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             Destroy(gameObject);
+        }
+
+        if (collision.gameObject.CompareTag("Player")) {
+            GameManager.Instance.SetGameState(GameState.GameOver);
         }
     }
 }

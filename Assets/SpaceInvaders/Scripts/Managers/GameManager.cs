@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public GameState CurrentGameState { get; private set; } = GameState.StartingGame;
     public event Action<GameState> OnGameStateChanged = null;
     public Transform TopLimit;
+    public Transform BottomLimit;
 
     private void Awake()
     {

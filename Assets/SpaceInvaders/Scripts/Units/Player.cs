@@ -13,6 +13,11 @@ public class Player : MonoBehaviour
     private bool _cooldown = false;
     private float _cooldownTimer = 0.0f;
 
+    private void Awake()
+    {
+        GameManager.Instance.OnGameStateChanged += OnGameStateChanged;
+    }
+
     private void Start()
     {
         _body = GetComponent<Rigidbody2D>();
@@ -32,7 +37,8 @@ public class Player : MonoBehaviour
             _horizontal = Input.GetAxis("Horizontal");
 
             if (Input.GetKeyDown(KeyCode.Space) && !_cooldown) {
-                Projectile projectile = Instantiate(_projectilePrefab, transform.position, Quaternion.identity);
+                float y = GetComponent<SpriteRenderer>().bounds.size.y / 2 + _projectilePrefab.GetComponent<SpriteRenderer>().bounds.size.y;
+                Projectile projectile = Instantiate(_projectilePrefab, transform.position + Vector3.up * y, Quaternion.identity);
                 projectile.Speed = _projectileSpeed;
                 projectile.Direction = 1;
                 _cooldown = true;
@@ -44,6 +50,13 @@ public class Player : MonoBehaviour
     {
         if (_horizontal != 0) {
             _body.MovePosition(_body.position + Vector2.right * _horizontal * _speed * Time.fixedDeltaTime);
+        }
+    }
+
+    private void OnGameStateChanged(GameState newState)
+    {
+        if (newState == GameState.GameOver) {
+            Destroy(gameObject);
         }
     }
 }

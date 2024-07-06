@@ -4,7 +4,12 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-
+[System.Serializable]
+public class DificultyLevel
+{
+    public float MovimentInterval;
+    public int Enemies;
+}
 
 public class EnemiesManager : MonoBehaviour
 {
@@ -31,6 +36,7 @@ public class EnemiesManager : MonoBehaviour
 
     [SerializeField] private float _shootSpeed;
     [SerializeField] private float _shootInterval;
+    [SerializeField] private DificultyLevel[] _dificulties;
 
     private float _spawnTimer = 0.0f;
     private float _movimentTimer = 0.0f;
@@ -101,6 +107,15 @@ public class EnemiesManager : MonoBehaviour
         GameManager.Instance.OnGameStateChanged -= this.OnGameStateChanged;
     }
 
+    private void UpdateMovimentInterval()
+    {
+        foreach (DificultyLevel level in _dificulties) {
+            if (_enemies.Count <= level.Enemies && _movimentInterval > level.MovimentInterval) {
+                _movimentInterval = level.MovimentInterval;
+            }
+        }
+    }
+
     private void StartSpawningEnemies()
     {
         _spawnTimer = 0.0f;
@@ -120,6 +135,13 @@ public class EnemiesManager : MonoBehaviour
     {
         foreach (GameObject enemy in _enemies) {
             enemy.GetComponent<Animator>().speed = 1;
+        }
+    }
+
+    private void StopEnemiesAnimations()
+    {
+        foreach (GameObject enemy in _enemies) {
+            enemy.GetComponent<Animator>().speed = 0;
         }
     }
 
@@ -236,6 +258,8 @@ public class EnemiesManager : MonoBehaviour
         } else if (GameManager.Instance.CurrentGameState == GameState.Playing) {
             MoveEnemies();
             EnemiesShoot();
+        } else {
+            StopEnemiesAnimations();
         }
     }
 
@@ -244,6 +268,7 @@ public class EnemiesManager : MonoBehaviour
         if (_deadEnemy != null) {
             return;
         }
+        UpdateMovimentInterval();
         _deadEnemy = enemy;
         enemy.GetComponent<Animator>().SetBool("Dead", true);
         _movimentTimer = _movimentInterval * 0.5f;
