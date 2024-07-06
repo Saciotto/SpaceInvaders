@@ -4,12 +4,20 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum GameState
+{
+    StartingGame,
+    SpawningEnimies,
+    Playing,
+    GameOver
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] private Transform _spawnReference;
-    [SerializeField] private GameObject _squidPrefab;
+    public GameState CurrentGameState { get; private set; } = GameState.StartingGame;
+    public event Action<GameState> OnGameStateChanged = null;
 
     private void Awake()
     {
@@ -22,9 +30,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Vector3 initialPosition = _spawnReference.position - new Vector3(4, 0, 0);
-        for (int i = 0; i < 11; i++) {
-            Instantiate(_squidPrefab, initialPosition + Vector3.right * i * 0.8f, Quaternion.identity);
+        SetGameState(GameState.SpawningEnimies);
+    }
+
+    public void SetGameState(GameState newState)
+    {
+        if (CurrentGameState != newState) {
+            CurrentGameState = newState;
+            OnGameStateChanged?.Invoke(CurrentGameState);
         }
     }
 }
