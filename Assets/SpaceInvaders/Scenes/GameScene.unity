@@ -807,8 +807,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5563286ddcaa71547b010a75b2ebaeb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnPosition: {fileID: 537040065}
   _squidPrefab: {fileID: 2037554128330337953, guid: 88900e0f6b833a747b070e6955297ba1, type: 3}
+  _crabPrefab: {fileID: 8674430483101100422, guid: 5ef31f5b6e376fe47b3a0e7074e3cfb8, type: 3}
+  _octopusPrefab: {fileID: 1861252293346857835, guid: b41d2453bb817ba45a9acdde7dda05f0, type: 3}
+  _spawnPosition: {fileID: 537040065}
+  _spawnInterval: 0.05
+  _horizontalDistance: 0.3
+  _verticalDistance: 0.1
+  _spawnSquidRows: 2
+  _spawnCrabRows: 2
+  _spawnOctopusRows: 2
+  _spawnCols: 10
 --- !u!1 &2035731240
 GameObject:
   m_ObjectHideFlags: 0
