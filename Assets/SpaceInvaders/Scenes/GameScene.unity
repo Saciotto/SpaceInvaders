@@ -327,6 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
+  _cooldownTime: 1
   _projectilePrefab: {fileID: 2572790418410145924, guid: 62c2abed3adbfce47a13eef5e0497a85, type: 3}
 --- !u!1 &369736314
 GameObject:
@@ -426,6 +427,7 @@ Transform:
   - {fileID: 940456164}
   - {fileID: 1722652759}
   - {fileID: 369736315}
+  - {fileID: 784754402}
   m_Father: {fileID: 413769032}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &537040064
@@ -458,6 +460,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 413769032}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &784754401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 784754402}
+  m_Layer: 0
+  m_Name: Projectile Limit Top
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &784754402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784754401}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.35, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 507558127}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &848717942
 GameObject:
@@ -795,6 +828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f44a30b7a06ea344eb86fe4ae67ef288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TopLimit: {fileID: 784754402}
 --- !u!1 &1377180417
 GameObject:
   m_ObjectHideFlags: 0

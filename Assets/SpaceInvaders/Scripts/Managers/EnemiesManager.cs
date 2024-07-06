@@ -196,8 +196,7 @@ public class EnemiesManager : MonoBehaviour
     public void Kill(GameObject enemy)
     {
         if (_deadEnemy != null) {
-            _enemies.Remove(_deadEnemy);
-            Destroy(_deadEnemy);
+            return;
         }
         _deadEnemy = enemy;
         enemy.GetComponent<Animator>().SetBool("Dead", true);
