@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 
@@ -12,6 +13,7 @@ public class EnemiesManager : MonoBehaviour
     [SerializeField] private GameObject _squidPrefab;
     [SerializeField] private GameObject _crabPrefab;
     [SerializeField] private GameObject _octopusPrefab;
+    [SerializeField] private Projectile[] _projectilePrefabs;
 
     [SerializeField] private Transform _spawnPosition;
     [SerializeField] private Transform _leftLimit;
@@ -27,8 +29,12 @@ public class EnemiesManager : MonoBehaviour
     [SerializeField] private float _movimentInterval;
     [SerializeField] private float _movimentDistance;
 
+    [SerializeField] private float _shootSpeed;
+    [SerializeField] private float _shootInterval;
+
     private float _spawnTimer = 0.0f;
     private float _movimentTimer = 0.0f;
+    private float _shootTimer = 0.0f;
     private List<EnemyData> _enemiesData;
     private List<GameObject> _enemies;
     private int _spawnedEnemies = 0;
@@ -132,6 +138,7 @@ public class EnemiesManager : MonoBehaviour
     private void StartEnemiesMoviment()
     {
         _movimentTimer = 0.0f;
+        _shootTimer = 0.0f;
         StartEnemiesAnimations();
     }
 
@@ -184,12 +191,51 @@ public class EnemiesManager : MonoBehaviour
         }
     }
 
+    private void EnemyShoot(GameObject enemy)
+    {
+        int index = UnityEngine.Random.Range(0, _projectilePrefabs.Length - 1);
+        Projectile prefab = _projectilePrefabs[index];
+        float y = enemy.GetComponent<SpriteRenderer>().bounds.size.y / 2 + prefab.GetComponent<SpriteRenderer>().bounds.size.y;
+        Projectile projectile = Instantiate(prefab, enemy.transform.position - Vector3.up * y, Quaternion.identity);
+        projectile.Speed = _shootSpeed;
+        projectile.Direction = -1;
+    }
+
+    private void EnemiesShoot()
+    {
+        _shootTimer += Time.deltaTime;
+        if (_shootTimer < _shootInterval) {
+            return;
+        }
+        _shootTimer -= _shootInterval;
+
+        List<float> cols = new List<float>();
+        List<GameObject> canShoot = new List<GameObject>();
+
+        for (int i = _enemies.Count; i > 0; i--) {
+            GameObject enemy = _enemies[i - 1];
+            if (cols.Contains(enemy.transform.position.x)) {
+                continue;
+            }
+            cols.Add(enemy.transform.position.x);
+            canShoot.Add(enemy);
+        }
+
+        if (canShoot.Count == 0)
+            return;
+
+        int index = UnityEngine.Random.Range(0, canShoot.Count);
+        GameObject shootingEnemy = canShoot[index];
+        EnemyShoot(shootingEnemy);
+    }
+
     private void FixedUpdate()
     {
         if (GameManager.Instance.CurrentGameState == GameState.SpawningEnimies) {
             SpawningEnemies();
         } else if (GameManager.Instance.CurrentGameState == GameState.Playing) {
             MoveEnemies();
+            EnemiesShoot();
         }
     }
 
@@ -201,5 +247,6 @@ public class EnemiesManager : MonoBehaviour
         _deadEnemy = enemy;
         enemy.GetComponent<Animator>().SetBool("Dead", true);
         _movimentTimer = _movimentInterval * 0.5f;
+        _shootTimer = 0;
     }
 }

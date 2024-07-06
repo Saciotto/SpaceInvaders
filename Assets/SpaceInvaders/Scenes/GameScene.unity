@@ -329,6 +329,7 @@ MonoBehaviour:
   _speed: 5
   _cooldownTime: 1
   _projectilePrefab: {fileID: 2572790418410145924, guid: 62c2abed3adbfce47a13eef5e0497a85, type: 3}
+  _projectileSpeed: 14
 --- !u!1 &369736314
 GameObject:
   m_ObjectHideFlags: 0
@@ -876,6 +877,8 @@ MonoBehaviour:
   _squidPrefab: {fileID: 2037554128330337953, guid: 88900e0f6b833a747b070e6955297ba1, type: 3}
   _crabPrefab: {fileID: 8674430483101100422, guid: 5ef31f5b6e376fe47b3a0e7074e3cfb8, type: 3}
   _octopusPrefab: {fileID: 1861252293346857835, guid: b41d2453bb817ba45a9acdde7dda05f0, type: 3}
+  _projectilePrefabs:
+  - {fileID: 2572790418410145924, guid: 62c2abed3adbfce47a13eef5e0497a85, type: 3}
   _spawnPosition: {fileID: 537040065}
   _leftLimit: {fileID: 1722652759}
   _rightLimit: {fileID: 369736315}
@@ -888,6 +891,8 @@ MonoBehaviour:
   _spawnCols: 10
   _movimentInterval: 1
   _movimentDistance: 0.25
+  _shootSpeed: 6
+  _shootInterval: 1.5
 --- !u!1 &1722652758
 GameObject:
   m_ObjectHideFlags: 0

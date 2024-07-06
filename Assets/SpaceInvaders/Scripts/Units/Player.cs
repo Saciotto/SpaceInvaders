@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _cooldownTime = 1f;
     [SerializeField] private Projectile _projectilePrefab;
+    [SerializeField] private float _projectileSpeed = 10f;
 
     private float _horizontal = 0;
     private Rigidbody2D _body;
@@ -32,6 +33,7 @@ public class Player : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space) && !_cooldown) {
                 Projectile projectile = Instantiate(_projectilePrefab, transform.position, Quaternion.identity);
+                projectile.Speed = _projectileSpeed;
                 projectile.Direction = 1;
                 _cooldown = true;
             }   
