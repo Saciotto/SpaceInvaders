@@ -147,7 +147,7 @@ public class EnemiesManager : MonoBehaviour
 
     private void SpawningEnemies()
     {
-        _spawnTimer += Time.deltaTime;
+        _spawnTimer += Time.fixedDeltaTime;
         while (_spawnTimer > _spawnedEnemies * _spawnInterval && _spawnedEnemies < _enemiesData.Count) {
             EnemyData data = _enemiesData[_spawnedEnemies];
             SpawnEnemy(data);
@@ -188,7 +188,7 @@ public class EnemiesManager : MonoBehaviour
 
     private void MoveEnemies()
     {
-        _movimentTimer += Time.deltaTime;
+        _movimentTimer += Time.fixedDeltaTime;
         if (_movimentTimer < _movimentInterval) {
             return;
         }
@@ -225,7 +225,7 @@ public class EnemiesManager : MonoBehaviour
 
     private void EnemiesShoot()
     {
-        _shootTimer += Time.deltaTime;
+        _shootTimer += Time.fixedDeltaTime;
         if (_shootTimer < _shootInterval) {
             return;
         }
