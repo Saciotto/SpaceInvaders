@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [System.Serializable]
 public class DificultyLevel
@@ -19,10 +20,13 @@ public class EnemiesManager : MonoBehaviour
     [SerializeField] private GameObject _crabPrefab;
     [SerializeField] private GameObject _octopusPrefab;
     [SerializeField] private Projectile[] _projectilePrefabs;
+    [SerializeField] private Tilemap _tilemap;
 
     [SerializeField] private Transform _spawnPosition;
     [SerializeField] private Transform _leftLimit;
     [SerializeField] private Transform _rightLimit;
+    [SerializeField] private Transform _shieldLimit;
+    [SerializeField] private Transform _gameOverLimit;
 
     [SerializeField] private float _spawnInterval;
     [SerializeField] private float _horizontalDistance;
@@ -221,6 +225,7 @@ public class EnemiesManager : MonoBehaviour
         Projectile projectile = Instantiate(prefab, enemy.transform.position - Vector3.up * y, Quaternion.identity);
         projectile.Speed = _shootSpeed;
         projectile.Direction = -1;
+        projectile.Origin = "Enemy";
     }
 
     private void EnemiesShoot()
@@ -251,6 +256,30 @@ public class EnemiesManager : MonoBehaviour
         EnemyShoot(shootingEnemy);
     }
 
+    private void CheckShieldDestruction()
+    {
+        if (!_tilemap.isActiveAndEnabled) {
+            return;
+        }
+
+        foreach (GameObject enemy in _enemies) {
+            if (enemy.transform.position.y < _shieldLimit.position.y) {
+                _tilemap.gameObject.SetActive(false);
+                return;
+            }
+        }
+    }
+
+    private void CheckGameOver()
+    {
+        foreach (GameObject enemy in _enemies) {
+            if (enemy.transform.position.y < _gameOverLimit.position.y) {
+                GameManager.Instance.SetGameState(GameState.GameOver);
+                return;
+            }
+        }
+    }
+
     private void FixedUpdate()
     {
         if (GameManager.Instance.CurrentGameState == GameState.SpawningEnimies) {
@@ -258,6 +287,8 @@ public class EnemiesManager : MonoBehaviour
         } else if (GameManager.Instance.CurrentGameState == GameState.Playing) {
             MoveEnemies();
             EnemiesShoot();
+            CheckShieldDestruction();
+            CheckGameOver();
         } else {
             StopEnemiesAnimations();
         }

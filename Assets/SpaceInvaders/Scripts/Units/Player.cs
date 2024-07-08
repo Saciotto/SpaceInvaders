@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
                 Projectile projectile = Instantiate(_projectilePrefab, transform.position + Vector3.up * y, Quaternion.identity);
                 projectile.Speed = _projectileSpeed;
                 projectile.Direction = 1;
+                projectile.Origin = gameObject.tag;
                 _cooldown = true;
             }   
         }

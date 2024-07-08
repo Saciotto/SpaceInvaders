@@ -8,6 +8,7 @@ TagManager:
   - PlayerLimits
   - InvaderLimits
   - Enemy
+  - Shield
   layers:
   - Default
   - TransparentFX
