@@ -32,6 +32,6 @@ public class CanvasManager : MonoBehaviour
     {
         _scoreText.text = $"Score: {ScoreManager.Instance.Score}";
         _livesText.text = $"Lives: {ScoreManager.Instance.Lives}";
-        _stageText.text = $"Stage: {ScoreManager.Instance.Stage}";
+        _stageText.text = $"Stage: {ScoreManager.Instance.Stage + 1}";
     }
 }
