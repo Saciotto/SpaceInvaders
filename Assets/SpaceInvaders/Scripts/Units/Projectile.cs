@@ -61,7 +61,8 @@ public class Projectile : MonoBehaviour
             collision.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             Destroy(gameObject);
         } else if (collision.gameObject.CompareTag("Player")) {
-            GameManager.Instance.SetGameState(GameState.GameOver);
+            GameManager.Instance.SetGameState(GameState.Die);
+            Destroy(gameObject);
         } else if (collision.gameObject.CompareTag("Shield")) {
             ScheduleDestruction();
             Tilemap tilemap = collision.gameObject.GetComponent<Tilemap>();
@@ -80,6 +81,12 @@ public class Projectile : MonoBehaviour
                 foreach (Vector3Int neighbor in neighbors) {
                     tilemap.SetTile(neighbor, null);
                 }
+            }
+        } else if (collision.gameObject.CompareTag("Projectile")){
+            if (Origin == "Player") {
+                ScheduleDestruction();
+            } else {
+                Destroy(gameObject);
             }
         } else {
             Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());

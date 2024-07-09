@@ -9,6 +9,7 @@ TagManager:
   - InvaderLimits
   - Enemy
   - Shield
+  - Projectile
   layers:
   - Default
   - TransparentFX

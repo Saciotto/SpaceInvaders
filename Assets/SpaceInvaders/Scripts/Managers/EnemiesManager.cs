@@ -253,6 +253,10 @@ public class EnemiesManager : MonoBehaviour
 
         int index = UnityEngine.Random.Range(0, canShoot.Count);
         GameObject shootingEnemy = canShoot[index];
+
+        if (shootingEnemy == _deadEnemy)
+            return;
+
         EnemyShoot(shootingEnemy);
     }
 
@@ -299,10 +303,10 @@ public class EnemiesManager : MonoBehaviour
         if (_deadEnemy != null) {
             return;
         }
+        ScoreManager.Instance.IncrementScore();
         UpdateMovimentInterval();
         _deadEnemy = enemy;
         enemy.GetComponent<Animator>().SetBool("Dead", true);
         _movimentTimer = _movimentInterval * 0.5f;
-        _shootTimer = 0;
     }
 }

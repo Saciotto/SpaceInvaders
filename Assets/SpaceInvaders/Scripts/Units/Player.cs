@@ -9,9 +9,13 @@ public class Player : MonoBehaviour
 
     private float _horizontal = 0;
     private Rigidbody2D _body;
+    private Animator _animator;
 
     private bool _cooldown = false;
     private float _cooldownTimer = 0.0f;
+
+    private bool _isAlive = true;
+    private float _dieTimer = 0.0f;
 
     private void Awake()
     {
@@ -21,6 +25,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _body = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -33,7 +38,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (GameManager.Instance.CurrentGameState == GameState.Playing) {
+        if (GameManager.Instance.CurrentGameState == GameState.Playing && _isAlive) {
             _horizontal = Input.GetAxis("Horizontal");
 
             if (Input.GetKeyDown(KeyCode.Space) && !_cooldown) {
@@ -45,19 +50,36 @@ public class Player : MonoBehaviour
                 _cooldown = true;
             }   
         }
+
+        if (!_isAlive) {
+            _dieTimer += Time.deltaTime;
+            if (_dieTimer > 1.2f) {
+                Destroy(gameObject);
+            }
+        }
     }
 
     private void FixedUpdate()
     {
-        if (_horizontal != 0) {
+        if (_horizontal != 0 && _isAlive) {
             _body.MovePosition(_body.position + Vector2.right * _horizontal * _speed * Time.fixedDeltaTime);
         }
     }
 
     private void OnGameStateChanged(GameState newState)
     {
-        if (newState == GameState.GameOver) {
-            Destroy(gameObject);
+        if (newState == GameState.Die && _isAlive) {
+            Die();
+        } else if (newState == GameState.GameOver && _isAlive) {
+            Die();
         }
+    }
+
+    private void Die()
+    {
+        _isAlive = false;
+        _dieTimer = 0.0f;
+        _animator.SetBool("Die", true);
+        _body.velocity = Vector2.zero;
     }
 }
