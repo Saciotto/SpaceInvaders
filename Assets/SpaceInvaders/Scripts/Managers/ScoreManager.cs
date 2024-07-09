@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,10 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
+
+    public event Action OnScoreChanged = null;   
+    public event Action OnLivesChanged = null;
+    public event Action OnStageChanged = null;
 
     public int Score;
     public int Lives;
@@ -23,6 +28,7 @@ public class ScoreManager : MonoBehaviour
     public void IncrementScore()
     {
         Score += 20 * (Stage + 1);
+        OnScoreChanged?.Invoke();
     }
 
     public void DecrementLives()
@@ -32,5 +38,12 @@ public class ScoreManager : MonoBehaviour
         } else {
             Lives--;
         }
+        OnLivesChanged?.Invoke();
+    }
+    public void IncrementStage()
+    {
+        Stage++;
+        OnStageChanged?.Invoke();
     }
 }
+    
