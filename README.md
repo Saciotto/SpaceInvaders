@@ -1,6 +1,6 @@
-# Flappy Bird
+# Space Invaders
 
-Reproduction of the Flappy Bird game in Unity.
+Reproduction of the Space Invaders game in Unity.
 
 ## Dependencies
 
